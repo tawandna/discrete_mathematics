@@ -11,8 +11,6 @@
 #include <cctype>
 #include <windows.h>
 
-using namespace std;
-
 namespace disc_math
 {
     auto trim = [](std::string s)
@@ -401,7 +399,7 @@ namespace disc_math
         auto const universal_diapasone = read_input_value<int>();
         if (universal_diapasone.size() > 2)
         {
-            cout << "Введено слишком много чисел";
+            std::cout << "Введено слишком много чисел";
             return 0;
         }
         std::cout << "\nVector universal diapasone IS --->";

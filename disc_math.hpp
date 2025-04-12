@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <cctype>
+#include <cmath>
 #include <windows.h>
 
 namespace disc_math
@@ -441,6 +442,116 @@ namespace disc_math
             }
             std::cout << "\n";
         }
+        return 0;
+    }
+
+    long long combinations(int n, int k)
+    {
+        if (k < 0 || k > n)
+            return 0;
+        if (k == 0 || k == n)
+            return 1;
+
+        k = std::min(k, n - k); // Оптимизация: используем свойство симметрии C(n,k) = C(n,n-k)
+        long long res = 1;
+
+        for (int i = 1; i <= k; ++i)
+        {
+            res *= (n - k + i);
+            res /= i;
+        }
+
+        return res;
+    }
+
+    long long calculate_expulsion_options(int group1, int group2, int k)
+    {
+        long long total = 0;
+
+        // Перебираем все возможные распределения (i из group1, k-i из group2)
+        for (int i = 0; i <= k; ++i)
+        {
+            if (i <= group1 && (k - i) <= group2)
+            {
+                total += combinations(group1, i) * combinations(group2, k - i);
+            }
+        }
+
+        return total;
+    }
+
+    int first_combinator_exercise()
+    {
+        int group1 = 0;
+        int group2 = 0;
+        int k = 0;
+
+        std::cout << "Введите количество студентов в 1 группе: ";
+        std::cin >> group1;
+        std::cout << "\nВведите количество студентов во 2 группе: ";
+        std::cin >> group2;
+        std::cout << "\nВведите количество студентов для отчисления: ";
+        std::cin >> k;
+
+        long long options = calculate_expulsion_options(group1, group2, k);
+
+        std::cout << "Количество комбинация для отчисления " << k
+                  << " студентов: " << options << std::endl;
+        if (0 > k || 0 > group1 || 0 > group2)
+        {
+            std::cout << "Ошибка: количество студентов не может быть отрицательным!\n";
+            return 1;
+        }
+        return 0;
+    }
+
+    int second_combinator_exercise()
+    {
+        int num_of_passengers = 0;
+        int num_of_floors = 0;
+        std::cout << "\nЗадача:" << std::endl;
+        std::cout << "В лифт A-этажного дома вошли N пассажиров. Сколькими способами могут выйти пассажиры на каждом этаже, начиная со второго ? \n";
+        std::cout << "Введите количество этажей (A)" << std::endl;
+        std::cin >> num_of_floors;
+        std::cout << "\nВведите количество пассажиров в лифте (N) " << std::endl;
+        std::cin >> num_of_passengers;
+        long long total_ways = std::pow((num_of_floors - 1), num_of_passengers);
+        std::cout << "\nЭлементарно решается, возведя количество этажей (" << num_of_floors << "-1, т.к первый этаж мы не учитываем), в степень '" << num_of_passengers << "', равную общему количеству пассажиров" << std::endl;
+        std::cout << "\nИтого, количество способов для выхода " << num_of_passengers << " пассажира(ов) с " << num_of_floors << " этажа(ей) ---> " << total_ways << std::endl;
+        return 0;
+    }
+
+    long long factorial(int n)
+    {
+        long long result = 1;
+        for (int i = 2; i <= n; ++i)
+        {
+            result *= i;
+        }
+        return result;
+    }
+
+    long long combs(int n, int k)
+    {
+        return factorial(n) / (factorial(k) * factorial(n - k));
+    }
+
+    int third_combinator_exercise()
+    {
+        int num_of_candidates = 0;
+        int num_of_positions = 0;
+        std::cout << "\nЗадача:" << std::endl;
+        std::cout << "Сколькими способами можно назначить A человек на A различные должности, если всего есть N кандидатов на эти должности?\n";
+        std::cout << "Введите количество должностей (A)" << std::endl;
+        std::cin >> num_of_positions;
+        std::cout << "\nВведите количество кандидатов (N) " << std::endl;
+        std::cin >> num_of_candidates;
+        std::cout << "Задачка решается через сочетание С(" << num_of_candidates << "," << num_of_positions << ") и перестановку выбранных кандидатов" << std::endl;
+        long long ways = combs(num_of_candidates, num_of_positions) * factorial(num_of_positions);
+
+        std::cout << "Количество способов назначить " << num_of_positions
+                  << " человек на " << num_of_positions << " должностей из "
+                  << num_of_candidates << " кандидатов: " << ways << std::endl;
         return 0;
     }
 }

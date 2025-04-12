@@ -10,7 +10,10 @@ void print_help()
               << "Available modes:\n"
               << "  -h, --help      Show this help message\n"
               << "  -n1, --exercise1     Turn on task number 1 solving mode\n"
-              << "  -n1, --exercise2     Turn on task number 2 solving mode\n";
+              << "  -n2, --exercise2     Turn on task number 2 solving mode\n"
+              << "  -c1, --combinators1     Turn on task combinators 1 solving mode\n"
+              << "  -c2, --combinators2     Turn on task combinators 2 solving mode\n"
+              << "  -c3, --combinators3     Turn on task combinators 3 solving mode\n";
 }
 
 int main(int argc, char *argv[])
@@ -23,8 +26,12 @@ int main(int argc, char *argv[])
     std::map<std::string, bool> modes = {
         {"exercise1", false},
         {"exercise2", false},
+        {"combinators1", false},
+        {"combinators2", false},
+        {"combinators3", false},
     };
 
+    int count_of_flags = 0;
     for (int i = 1; i < argc; ++i)
     {
         std::string arg = argv[i];
@@ -42,13 +49,30 @@ int main(int argc, char *argv[])
         case hash("--help"):
             print_help();
             return 0;
-        case hash("-m"):
+        case hash("-n1"):
         case hash("--exercise1"):
             modes["exercise1"] = true;
+            count_of_flags++;
             break;
-        case hash("-g"):
+        case hash("-n2"):
         case hash("--exercise2"):
             modes["exercise2"] = true;
+            count_of_flags++;
+            break;
+        case hash("-c1"):
+        case hash("--combinators1"):
+            modes["combinators1"] = true;
+            count_of_flags++;
+            break;
+        case hash("-c2"):
+        case hash("--combinators2"):
+            modes["combinators2"] = true;
+            count_of_flags++;
+            break;
+        case hash("-c3"):
+        case hash("--combinators3"):
+            modes["combinators3"] = true;
+            count_of_flags++;
             break;
         default:
             std::cerr << "Unknown option: " << arg << "\n";
@@ -56,9 +80,9 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
-    if (modes["exercise1"] && modes["exercise2"])
+    if (1 < count_of_flags)
     {
-        std::cerr << "Error: Cannot use both exercise1 and exercise1 simultaneously\n";
+        std::cerr << "Error: Cannot use more than 1 flag at once\n";
         return 1;
     }
 
@@ -75,11 +99,23 @@ int main(int argc, char *argv[])
     }
     if (modes["exercise1"])
     {
-        auto const res = first_exercise();
+        first_exercise();
     }
     else if (modes["exercise2"])
     {
-        auto const res1 = second_exercise();
+        second_exercise();
+    }
+    else if (modes["combinators1"])
+    {
+        first_combinator_exercise();
+    }
+    else if (modes["combinators2"])
+    {
+        second_combinator_exercise();
+    }
+    else if (modes["combinators3"])
+    {
+        third_combinator_exercise();
     }
     else
     {
